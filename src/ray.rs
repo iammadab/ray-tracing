@@ -8,7 +8,7 @@ pub(crate) struct Ray<'a> {
 }
 
 impl<'a> Ray<'a> {
-    fn new(a: &'a Vec3, b: &'a Vec3) -> Self {
+    pub(crate) fn new(a: &'a Vec3, b: &'a Vec3) -> Self {
         Self {
             origin: a,
             direction: b,
