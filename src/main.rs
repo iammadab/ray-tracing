@@ -34,37 +34,6 @@ fn color(ray: &Ray) -> Vec3 {
     &Vec3::new(1.0, 1.0, 1.0) * (1.0 - t) + &Vec3::new(0.5, 0.7, 1.0) * t
 }
 
-// equation of a sphere centered at the origin is given by:
-//  $x^2 + y^2 + z^2 = r^2$
-// if centered at some other point c = (cx, cy, cz) we have:
-//  $(x - cx)^2 + (y - cy)^2 + (z - cz)^2$
-// we want to determine if a ray hits the sphere
-// recall that a ray represents all positions on some line
-// the equation is given as follows:
-//  $p(t) = origin + t * dir = A + t * B$
-// we are trying to see if the following equation holds for any t
-// $dot(p(t) - c, p(t) - c)$ both p(t) and c are three dim vectors
-// $dot(A + t * B - C, A + t * B - C)$
-// via vector algebra we have the following simplification
-// $t^2 \cdot dot(B, B) + 2 \cdot t \cdot dot(B, A - C) + dot(A - C, A - C) - r^2 = 0$
-// this is a quadratic equation on the variable t
-// 3 possible cases:
-//  no roots: the ray doesn't hit the sphere
-//  1 root: the ray hit the sphere once (tanget point on the sphere)
-//  2 roots: the ray passed through the sphere (entry + exit)
-fn hit_sphere(center: &Vec3, radius: f32, ray: &Ray) -> f32 {
-    let oc = ray.origin() - center;
-    let a = ray.direction().dot(ray.direction());
-    let b = 2. * oc.dot(ray.direction());
-    let c = oc.dot(&oc) - radius * radius;
-    let discriminant = b * b - 4. * a * c;
-    if discriminant < 0. {
-        -1.0
-    } else {
-        (-b - discriminant.sqrt()) / (2. * a)
-    }
-}
-
 fn main() {
     let nx = 200;
     let ny = 100;
