@@ -1,5 +1,6 @@
 mod hitable;
 mod ray;
+mod sphere;
 mod vec3;
 
 use crate::ray::Ray;
