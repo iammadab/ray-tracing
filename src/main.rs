@@ -22,7 +22,11 @@ fn color(ray: &Ray) -> Vec3 {
 // TODO: derive sphere hit equation
 fn hit_sphere(center: &Vec3, radius: f32, ray: &Ray) -> bool {
     let oc = ray.origin() - center;
-    todo!()
+    let a = ray.direction().dot(ray.direction());
+    let b = 2. * oc.dot(ray.direction());
+    let c = oc.dot(&oc) - radius * radius;
+    let discriminant = b * b - 4. * a * c;
+    discriminant > 0.
 }
 
 fn main() {
