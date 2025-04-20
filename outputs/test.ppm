@@ -1,0 +1,7 @@
+P3
+3 2 # 3 columns 2 rows
+255 # max color
+
+# rgb triplets
+255   0 0    0 255   0  0 0 255 
+255 255 0  255 255 255  0 0   0
