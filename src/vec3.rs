@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use std::fmt::Display;
-use std::ops::Neg;
+use std::ops::{Add, Mul, Neg};
 
 #[derive(Default)]
 pub(crate) struct Vec3(f32, f32, f32);
@@ -45,6 +45,22 @@ impl Neg for Vec3 {
 
     fn neg(self) -> Self::Output {
         Vec3(-self.0, -self.1, -self.2)
+    }
+}
+
+impl Add<Vec3> for &Vec3 {
+    type Output = Vec3;
+
+    fn add(self, rhs: Vec3) -> Self::Output {
+        Vec3::new(self.0 + rhs.0, self.1 + rhs.1, self.2 + rhs.2)
+    }
+}
+
+impl Mul<f32> for &Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        Vec3::new(self.0 * rhs, self.1 * rhs, self.2 * rhs)
     }
 }
 
