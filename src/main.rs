@@ -6,8 +6,17 @@ use crate::vec3::Vec3;
 
 fn color(ray: &Ray) -> Vec3 {
     // if we hit the sphere return a red color
-    if hit_sphere(&Vec3::new(0., 0., -1.), 0.5, ray) {
-        return Vec3::new(1., 0., 0.);
+    let sphere_center = Vec3::new(0., 0., -1.);
+    let t = hit_sphere(&sphere_center, 0.5, ray);
+    if t > 0.0 {
+        let normal = &ray.point_at(t) - sphere_center;
+        let normalized_norm = normal.unit_vector();
+        // translate to 0..1 then use as rgb
+        return &Vec3::new(
+            normalized_norm.x() + 1.,
+            normalized_norm.y() + 1.,
+            normalized_norm.z() + 1.,
+        ) * 0.5;
     }
 
     // get the unit direction of the ray
@@ -41,13 +50,17 @@ fn color(ray: &Ray) -> Vec3 {
 //  no roots: the ray doesn't hit the sphere
 //  1 root: the ray hit the sphere once (tanget point on the sphere)
 //  2 roots: the ray passed through the sphere (entry + exit)
-fn hit_sphere(center: &Vec3, radius: f32, ray: &Ray) -> bool {
+fn hit_sphere(center: &Vec3, radius: f32, ray: &Ray) -> f32 {
     let oc = ray.origin() - center;
     let a = ray.direction().dot(ray.direction());
     let b = 2. * oc.dot(ray.direction());
     let c = oc.dot(&oc) - radius * radius;
     let discriminant = b * b - 4. * a * c;
-    discriminant > 0.
+    if discriminant < 0. {
+        -1.0
+    } else {
+        (-b - discriminant.sqrt()) / (2. * a)
+    }
 }
 
 fn main() {
