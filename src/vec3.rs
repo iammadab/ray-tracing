@@ -43,6 +43,10 @@ impl Vec3 {
         let len = self.length();
         Self::new(self.0 / len, self.1 / len, self.2 / len)
     }
+
+    pub(crate) fn dot(&self, rhs: &Self) -> f32 {
+        self.0 * rhs.0 + self.1 * rhs.1 + self.2 * rhs.2
+    }
 }
 
 impl Neg for Vec3 {
