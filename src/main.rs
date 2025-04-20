@@ -1,6 +1,15 @@
 mod ray;
 mod vec3;
 
+use crate::ray::Ray;
+use crate::vec3::Vec3;
+
+fn color(ray: &Ray) -> Vec3 {
+    // very simple function to determine the color of a ray
+    let unit_direction = ray.direction();
+    todo!()
+}
+
 fn main() {
     let nx = 200;
     let ny = 100;

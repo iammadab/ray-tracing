@@ -38,6 +38,11 @@ impl Vec3 {
     fn length(&self) -> f32 {
         self.squared_length().sqrt()
     }
+
+    fn unit_vector(&self) -> Vec3 {
+        let len = self.length();
+        Self::new(self.0 / len, self.1 / len, self.2 / len)
+    }
 }
 
 impl Neg for Vec3 {

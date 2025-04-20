@@ -2,7 +2,7 @@
 
 use crate::vec3::Vec3;
 
-struct Ray<'a> {
+pub(crate) struct Ray<'a> {
     origin: &'a Vec3,
     direction: &'a Vec3,
 }
@@ -15,15 +15,15 @@ impl<'a> Ray<'a> {
         }
     }
 
-    fn origin(&self) -> &Vec3 {
+    pub(crate) fn origin(&self) -> &Vec3 {
         self.origin
     }
 
-    fn direction(&self) -> &Vec3 {
+    pub(crate) fn direction(&self) -> &Vec3 {
         self.direction
     }
 
-    fn point_at(&self, t: f32) -> Vec3 {
+    pub(crate) fn point_at(&self, t: f32) -> Vec3 {
         self.origin + self.direction * t
     }
 }
