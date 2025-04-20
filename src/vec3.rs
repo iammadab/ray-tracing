@@ -11,23 +11,23 @@ impl Vec3 {
         Self(a, b, c)
     }
 
-    const fn x(&self) -> f32 {
+    pub(crate) const fn x(&self) -> f32 {
         self.0
     }
-    const fn y(&self) -> f32 {
+    pub(crate) const fn y(&self) -> f32 {
         self.1
     }
-    const fn z(&self) -> f32 {
+    pub(crate) const fn z(&self) -> f32 {
         self.2
     }
 
-    const fn r(&self) -> f32 {
+    pub(crate) const fn r(&self) -> f32 {
         self.0
     }
-    const fn g(&self) -> f32 {
+    pub(crate) const fn g(&self) -> f32 {
         self.1
     }
-    const fn b(&self) -> f32 {
+    pub(crate) const fn b(&self) -> f32 {
         self.2
     }
 
@@ -39,7 +39,7 @@ impl Vec3 {
         self.squared_length().sqrt()
     }
 
-    fn unit_vector(&self) -> Vec3 {
+    pub(crate) fn unit_vector(&self) -> Vec3 {
         let len = self.length();
         Self::new(self.0 / len, self.1 / len, self.2 / len)
     }
@@ -57,6 +57,14 @@ impl Add<Vec3> for &Vec3 {
     type Output = Vec3;
 
     fn add(self, rhs: Vec3) -> Self::Output {
+        Vec3::new(self.0 + rhs.0, self.1 + rhs.1, self.2 + rhs.2)
+    }
+}
+
+impl Add for Vec3 {
+    type Output = Vec3;
+
+    fn add(self, rhs: Self) -> Self::Output {
         Vec3::new(self.0 + rhs.0, self.1 + rhs.1, self.2 + rhs.2)
     }
 }
