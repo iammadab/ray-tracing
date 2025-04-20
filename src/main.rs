@@ -19,6 +19,12 @@ fn color(ray: &Ray) -> Vec3 {
     &Vec3::new(1.0, 1.0, 1.0) * (1.0 - t) + &Vec3::new(0.5, 0.7, 1.0) * t
 }
 
+// TODO: derive sphere hit equation
+fn hit_sphere(center: &Vec3, radius: f32, ray: &Ray) -> bool {
+    let oc = ray.origin() - center;
+    todo!()
+}
+
 fn main() {
     let nx = 200;
     let ny = 100;
