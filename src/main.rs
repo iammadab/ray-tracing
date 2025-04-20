@@ -4,8 +4,12 @@ mod vec3;
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 
-// very simple function to determine the color of a ray
 fn color(ray: &Ray) -> Vec3 {
+    // if we hit the sphere return a red color
+    if hit_sphere(&Vec3::new(0., 0., -1.), 0.5, ray) {
+        return Vec3::new(1., 0., 0.);
+    }
+
     // get the unit direction of the ray
     // this will be a number between -1 and 1
     let unit_direction = ray.direction().unit_vector();
