@@ -3,9 +3,14 @@
 use std::fmt::Display;
 use std::ops::Neg;
 
-struct Vec3(f32, f32, f32);
+#[derive(Default)]
+pub(crate) struct Vec3(f32, f32, f32);
 
 impl Vec3 {
+    pub(crate) fn new(a: f32, b: f32, c: f32) -> Self {
+        Self(a, b, c)
+    }
+
     const fn x(&self) -> f32 {
         self.0
     }
