@@ -4,21 +4,17 @@ mod sphere;
 mod vec3;
 mod world;
 
+use hitable::Hitable;
+
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 
-fn color(ray: &Ray) -> Vec3 {
-    // if we hit the sphere return a red color
-    let sphere_center = Vec3::new(0., 0., -1.);
-    let t = hit_sphere(&sphere_center, 0.5, ray);
-    if t > 0.0 {
-        let normal = &ray.point_at(t) - sphere_center;
-        let normalized_norm = normal.unit_vector();
-        // translate to 0..1 then use as rgb
+fn color(ray: &Ray, world: impl Hitable) -> Vec3 {
+    if let Some(hit_record) = world.hit(ray, 0.0, f32::MAX) {
         return &Vec3::new(
-            normalized_norm.x() + 1.,
-            normalized_norm.y() + 1.,
-            normalized_norm.z() + 1.,
+            hit_record.normal.x() + 1.,
+            hit_record.normal.y() + 1.,
+            hit_record.normal.z() + 1.,
         ) * 0.5;
     }
 
