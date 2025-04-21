@@ -1,7 +1,14 @@
 use crate::hitable::{HitRecord, Hitable};
 
-struct World {
+#[derive(Default)]
+pub(crate) struct World {
     hittable_objects: Vec<Box<dyn Hitable>>,
+}
+
+impl World {
+    pub(crate) fn add_object(&mut self, obj: Box<dyn Hitable>) {
+        self.hittable_objects.push(obj)
+    }
 }
 
 impl Hitable for World {

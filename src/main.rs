@@ -5,11 +5,13 @@ mod vec3;
 mod world;
 
 use hitable::Hitable;
+use sphere::Sphere;
+use world::World;
 
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 
-fn color(ray: &Ray, world: impl Hitable) -> Vec3 {
+fn color(ray: &Ray, world: &impl Hitable) -> Vec3 {
     if let Some(hit_record) = world.hit(ray, 0.0, f32::MAX) {
         return &Vec3::new(
             hit_record.normal.x() + 1.,
@@ -44,6 +46,11 @@ fn main() {
     let vertical_len = Vec3::new(0.0, 2.0, 0.0);
     let origin = Vec3::new(0.0, 0.0, 0.0);
 
+    // build the world
+    let mut world = World::default();
+    world.add_object(Box::new(Sphere::new(Vec3::new(0., 0., -1.), 0.5)));
+    world.add_object(Box::new(Sphere::new(Vec3::new(0., -100.5, -1.), 0.5)));
+
     for j in (0..=(ny - 1)).rev() {
         for i in 0..nx {
             // horizontal percent
@@ -58,7 +65,7 @@ fn main() {
             let ray = Ray::new(&origin, &point);
 
             // compute ray color entirely based on y axis dimension
-            let ray_color = color(&ray);
+            let ray_color = color(&ray, &world);
 
             let ir = (255.99 * ray_color.r()) as i32;
             let ig = (255.99 * ray_color.g()) as i32;
