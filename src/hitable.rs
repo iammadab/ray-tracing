@@ -1,7 +1,7 @@
 use crate::{ray::Ray, vec3::Vec3};
 
 pub(crate) struct HitRecord {
-    t: f32,
+    pub(crate) t: f32,
     point: Vec3,
     normal: Vec3,
 }

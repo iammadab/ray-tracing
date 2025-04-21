@@ -2,6 +2,7 @@ mod hitable;
 mod ray;
 mod sphere;
 mod vec3;
+mod world;
 
 use crate::ray::Ray;
 use crate::vec3::Vec3;
