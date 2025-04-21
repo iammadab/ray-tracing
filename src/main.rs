@@ -49,7 +49,8 @@ fn main() {
     // build the world
     let mut world = World::default();
     world.add_object(Box::new(Sphere::new(Vec3::new(0., 0., -1.), 0.5)));
-    world.add_object(Box::new(Sphere::new(Vec3::new(0., -100.5, -1.), 0.5)));
+    world.add_object(Box::new(Sphere::new(Vec3::new(0., -100.5, -1.), 100.)));
+    world.add_object(Box::new(Sphere::new(Vec3::new(-0.5, 0.5, -1.), 0.5)));
 
     for j in (0..=(ny - 1)).rev() {
         for i in 0..nx {
