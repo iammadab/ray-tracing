@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use std::fmt::Display;
-use std::ops::{Add, Mul, Neg, Sub};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Default)]
 pub(crate) struct Vec3(f32, f32, f32);
@@ -94,6 +94,14 @@ impl Mul<f32> for &Vec3 {
 
     fn mul(self, rhs: f32) -> Self::Output {
         Vec3::new(self.0 * rhs, self.1 * rhs, self.2 * rhs)
+    }
+}
+
+impl Div<f32> for &Vec3 {
+    type Output = Vec3;
+
+    fn div(self, rhs: f32) -> Self::Output {
+        Vec3::new(self.0 / rhs, self.1 / rhs, self.2 / rhs)
     }
 }
 
