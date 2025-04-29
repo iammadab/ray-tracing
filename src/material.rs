@@ -37,6 +37,9 @@ impl Metal {
 
 impl<'a> Material<'a> for Metal {
     fn scatter(&self, ray: &'a Ray, hit_record: &'a HitRecord) -> (Vec3, Ray<'a>, bool) {
-        todo!()
+        let reflected = ray.direction().unit_vector().reflect(&hit_record.normal);
+        let scattered = Ray::new(&hit_record.point, reflected);
+        let m = scattered.direction().dot(&hit_record.normal);
+        (self.attenuation.clone(), scattered, m > 0.)
     }
 }
