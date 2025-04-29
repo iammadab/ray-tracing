@@ -1,3 +1,4 @@
+mod camera;
 mod hitable;
 mod ray;
 mod sphere;
