@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use rand::Rng;
 use std::fmt::Display;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
@@ -50,6 +51,21 @@ impl Vec3 {
 
     pub(crate) fn reflect(&self, rhs: &Self) -> Vec3 {
         self - rhs * (&self.dot(rhs) * 2.)
+    }
+
+    /// Returns a random point in some unit sphere
+    pub(crate) fn random_in_unit_sphere() -> Vec3 {
+        let mut rng = rand::rng();
+        loop {
+            let p = Vec3::new(
+                rng.random::<f32>(),
+                rng.random::<f32>(),
+                rng.random::<f32>(),
+            );
+            if p.squared_length() >= 1. {
+                break p;
+            }
+        }
     }
 }
 

@@ -8,6 +8,7 @@ mod world;
 
 use camera::Camera;
 use hitable::Hitable;
+use material::Lambertian;
 use sphere::Sphere;
 use world::World;
 
@@ -31,13 +32,13 @@ fn color(ray: &Ray, world: &impl Hitable, depth: usize) -> Vec3 {
         //) * 0.5;
 
         // assume diffuse material
-        let reflected_direction = &hit_record.point + Sphere::random_in_unit();
+        let reflected_direction = &hit_record.point + Vec3::random_in_unit_sphere();
 
         // determine the color of the new ray
         // we keep doing this until we get a miss
         // TODO: should add some kind of recursion depth limit
         return &color(
-            &Ray::new(&hit_record.point, reflected_direction),
+            &Ray::new(hit_record.point.clone(), reflected_direction),
             world,
             depth - 1,
         ) * 0.5;
@@ -69,8 +70,16 @@ fn main() {
 
     // build the world
     let mut world = World::default();
-    world.add_object(Box::new(Sphere::new(Vec3::new(0., 0., -1.), 0.5)));
-    world.add_object(Box::new(Sphere::new(Vec3::new(0., -100.5, -1.), 100.)));
+    world.add_object(Box::new(Sphere::new(
+        Vec3::new(0., 0., -1.),
+        0.5,
+        Lambertian::default(),
+    )));
+    world.add_object(Box::new(Sphere::new(
+        Vec3::new(0., -100.5, -1.),
+        100.,
+        Lambertian::default(),
+    )));
 
     let camera = Camera::default();
 

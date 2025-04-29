@@ -27,6 +27,6 @@ impl Camera {
     pub fn get_ray(&self, u: f32, v: f32) -> Ray {
         // point on the progrction plane
         let point = &self.lower_left_corner + &self.horizontal_len * u + &self.vertical_len * v;
-        Ray::new(&self.origin, point)
+        Ray::new(self.origin.clone(), point)
     }
 }

@@ -4,22 +4,11 @@ pub(crate) struct HitRecord {
     pub(crate) t: f32,
     pub(crate) point: Vec3,
     pub(crate) normal: Vec3,
-    pub(crate) material: Box<dyn for<'a> Material<'a>>,
 }
 
 impl HitRecord {
-    pub(crate) fn new(
-        t: f32,
-        point: Vec3,
-        normal: Vec3,
-        material: Box<dyn for<'a> Material<'a>>,
-    ) -> Self {
-        Self {
-            t,
-            point,
-            normal,
-            material,
-        }
+    pub(crate) fn new(t: f32, point: Vec3, normal: Vec3) -> Self {
+        Self { t, point, normal }
     }
 }
 

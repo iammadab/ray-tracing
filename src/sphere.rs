@@ -3,40 +3,24 @@ use crate::{
     material::Material,
     vec3::Vec3,
 };
-use rand::Rng;
 
-pub(crate) struct Sphere {
+pub(crate) struct Sphere<M: Material> {
     center: Vec3,
     radius: f32,
-    material: Box<dyn for<'a> Material<'a>>,
+    material: M,
 }
 
-impl Sphere {
-    pub(crate) fn new(center: Vec3, radius: f32, material: Box<dyn for<'a> Material<'a>>) -> Self {
+impl<M: Material> Sphere<M> {
+    pub(crate) fn new(center: Vec3, radius: f32, material: M) -> Self {
         Self {
             center,
             radius,
             material,
         }
     }
-
-    /// Returns a random point in some unit sphere
-    pub(crate) fn random_in_unit() -> Vec3 {
-        let mut rng = rand::rng();
-        loop {
-            let p = Vec3::new(
-                rng.random::<f32>(),
-                rng.random::<f32>(),
-                rng.random::<f32>(),
-            );
-            if p.squared_length() >= 1. {
-                break p;
-            }
-        }
-    }
 }
 
-impl Hitable for Sphere {
+impl<M: Material> Hitable for Sphere<M> {
     // equation of a sphere centered at the origin is given by:
     //  $x^2 + y^2 + z^2 = r^2$
     // if centered at some other point c = (cx, cy, cz) we have:
@@ -79,12 +63,7 @@ impl Hitable for Sphere {
             let point_at_t = ray.point_at(root);
             let point_normal = &(&point_at_t - &self.center) / self.radius;
 
-            return Some(HitRecord::new(
-                root,
-                point_at_t,
-                point_normal,
-                self.material.clone(),
-            ));
+            return Some(HitRecord::new(root, point_at_t, point_normal));
         }
 
         None

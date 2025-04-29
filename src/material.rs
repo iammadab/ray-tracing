@@ -1,13 +1,12 @@
 use crate::hitable::HitRecord;
 use crate::ray::Ray;
-use crate::sphere::Sphere;
 use crate::vec3::Vec3;
 
-pub(crate) trait Material<'a>: Clone {
-    fn scatter(&self, ray: &'a Ray, hit_record: &'a HitRecord) -> (Vec3, Ray<'a>, bool);
+pub(crate) trait Material: Clone {
+    fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> (Vec3, Ray, bool);
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub(crate) struct Lambertian {
     attenuation: Vec3,
 }
@@ -18,10 +17,10 @@ impl Lambertian {
     }
 }
 
-impl<'a> Material<'a> for Lambertian {
-    fn scatter(&self, ray: &'a Ray, hit_record: &'a HitRecord) -> (Vec3, Ray<'a>, bool) {
-        let reflected_direction = &hit_record.point + Sphere::random_in_unit();
-        let scattered_ray = Ray::new(&hit_record.point, reflected_direction);
+impl Material for Lambertian {
+    fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> (Vec3, Ray, bool) {
+        let reflected_direction = &hit_record.point + Vec3::random_in_unit_sphere();
+        let scattered_ray = Ray::new(hit_record.point.clone(), reflected_direction);
         (self.attenuation.clone(), scattered_ray, true)
     }
 }
@@ -37,10 +36,10 @@ impl Metal {
     }
 }
 
-impl<'a> Material<'a> for Metal {
-    fn scatter(&self, ray: &'a Ray, hit_record: &'a HitRecord) -> (Vec3, Ray<'a>, bool) {
+impl Material for Metal {
+    fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> (Vec3, Ray, bool) {
         let reflected = ray.direction().unit_vector().reflect(&hit_record.normal);
-        let scattered = Ray::new(&hit_record.point, reflected);
+        let scattered = Ray::new(hit_record.point.clone(), reflected);
         let m = scattered.direction().dot(&hit_record.normal);
         (self.attenuation.clone(), scattered, m > 0.)
     }
