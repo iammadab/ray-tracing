@@ -13,6 +13,8 @@ use world::World;
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 
+use rand::Rng;
+
 fn color(ray: &Ray, world: &impl Hitable) -> Vec3 {
     if let Some(hit_record) = world.hit(ray, 0.0, f32::MAX) {
         return &Vec3::new(
@@ -38,6 +40,7 @@ fn color(ray: &Ray, world: &impl Hitable) -> Vec3 {
 fn main() {
     let nx = 200;
     let ny = 100;
+    let ns = 100;
 
     println!("P3");
     println!("{} {}", nx, ny);
@@ -50,18 +53,27 @@ fn main() {
 
     let camera = Camera::default();
 
+    // random number generator for antialiasing
+    let mut rng = rand::rng();
+
     for j in (0..=(ny - 1)).rev() {
         for i in 0..nx {
-            // horizontal percent
-            let u = (i as f32) / (nx as f32);
-            // vertical percent
-            let v = (j as f32) / (ny as f32);
+            let mut ray_color = Vec3::new(0., 0., 0.);
 
-            // compute ray passing through current pixel
-            let ray = camera.get_ray(u, v);
+            for _ in 0..ns {
+                // horizontal percent + small noise
+                let u = (i as f32 + rng.random::<f32>()) / (nx as f32);
+                // vertical percent + small noise
+                let v = (j as f32 + rng.random::<f32>()) / (ny as f32);
 
-            // compute ray color entirely based on y axis dimension
-            let ray_color = color(&ray, &world);
+                // compute ray passing through current pixel
+                let ray = camera.get_ray(u, v);
+
+                // compute ray color entirely based on y axis dimension
+                ray_color = ray_color + color(&ray, &world);
+            }
+
+            let ray_color = &ray_color / ns as f32;
 
             let ir = (255.99 * ray_color.r()) as i32;
             let ig = (255.99 * ray_color.g()) as i32;
