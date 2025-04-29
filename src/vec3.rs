@@ -47,6 +47,10 @@ impl Vec3 {
     pub(crate) fn dot(&self, rhs: &Self) -> f32 {
         self.0 * rhs.0 + self.1 * rhs.1 + self.2 * rhs.2
     }
+
+    pub(crate) fn reflect(&self, rhs: &Self) -> Vec3 {
+        self - rhs * (&self.dot(rhs) * 2.)
+    }
 }
 
 impl Neg for Vec3 {

@@ -24,3 +24,19 @@ impl<'a> Material<'a> for Lambertian {
         (self.attenuation.clone(), scattered_ray, true)
     }
 }
+
+pub(crate) struct Metal {
+    attenuation: Vec3,
+}
+
+impl Metal {
+    pub(crate) fn new(attenuation: Vec3) -> Self {
+        Self { attenuation }
+    }
+}
+
+impl<'a> Material<'a> for Metal {
+    fn scatter(&self, ray: &'a Ray, hit_record: &'a HitRecord) -> (Vec3, Ray<'a>, bool) {
+        todo!()
+    }
+}
