@@ -5,6 +5,7 @@ mod sphere;
 mod vec3;
 mod world;
 
+use camera::Camera;
 use hitable::Hitable;
 use sphere::Sphere;
 use world::World;
@@ -42,16 +43,12 @@ fn main() {
     println!("{} {}", nx, ny);
     println!("255");
 
-    let lower_left_corner = Vec3::new(-2.0, -1.0, -1.0);
-    let horizontal_len = Vec3::new(4.0, 0.0, 0.0);
-    let vertical_len = Vec3::new(0.0, 2.0, 0.0);
-    let origin = Vec3::new(0.0, 0.0, 0.0);
-
     // build the world
     let mut world = World::default();
     world.add_object(Box::new(Sphere::new(Vec3::new(0., 0., -1.), 0.5)));
     world.add_object(Box::new(Sphere::new(Vec3::new(0., -100.5, -1.), 100.)));
-    world.add_object(Box::new(Sphere::new(Vec3::new(-0.5, 0.5, -1.), 0.5)));
+
+    let camera = Camera::default();
 
     for j in (0..=(ny - 1)).rev() {
         for i in 0..nx {
@@ -59,12 +56,9 @@ fn main() {
             let u = (i as f32) / (nx as f32);
             // vertical percent
             let v = (j as f32) / (ny as f32);
-            // point on the projection plane
-            let point = &lower_left_corner + &horizontal_len * u + &vertical_len * v;
 
-            // create a ray using the camera origin and the point on the projection plane
-            // plane point will serve as the direction
-            let ray = Ray::new(&origin, &point);
+            // compute ray passing through current pixel
+            let ray = camera.get_ray(u, v);
 
             // compute ray color entirely based on y axis dimension
             let ray_color = color(&ray, &world);
