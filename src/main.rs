@@ -17,11 +17,19 @@ use rand::Rng;
 
 fn color(ray: &Ray, world: &impl Hitable) -> Vec3 {
     if let Some(hit_record) = world.hit(ray, 0.0, f32::MAX) {
-        return &Vec3::new(
-            hit_record.normal.x() + 1.,
-            hit_record.normal.y() + 1.,
-            hit_record.normal.z() + 1.,
-        ) * 0.5;
+        //return &Vec3::new(
+        //    hit_record.normal.x() + 1.,
+        //    hit_record.normal.y() + 1.,
+        //    hit_record.normal.z() + 1.,
+        //) * 0.5;
+
+        // assume diffuse material
+        let reflected_direction = &hit_record.point + Sphere::random_in_unit();
+
+        // determine the color of the new ray
+        // we keep doing this until we get a miss
+        // TODO: should add some kind of recursion depth limit
+        return &color(&Ray::new(&hit_record.point, reflected_direction), world) * 0.5;
     }
 
     // get the unit direction of the ray
