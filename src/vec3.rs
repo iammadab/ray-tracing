@@ -31,7 +31,7 @@ impl Vec3 {
         self.2
     }
 
-    const fn squared_length(&self) -> f32 {
+    pub(crate) const fn squared_length(&self) -> f32 {
         self.0 * self.0 + self.1 * self.1 + self.2 * self.2
     }
 

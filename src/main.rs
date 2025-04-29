@@ -15,12 +15,30 @@ use crate::vec3::Vec3;
 
 use rand::Rng;
 
-fn color(ray: &Ray, world: &impl Hitable) -> Vec3 {
-    if let Some(hit_record) = world.hit(ray, 0.0, f32::MAX) {
-        return &Vec3::new(
-            hit_record.normal.x() + 1.,
-            hit_record.normal.y() + 1.,
-            hit_record.normal.z() + 1.,
+fn color(ray: &Ray, world: &impl Hitable, depth: usize) -> Vec3 {
+    if depth == 0 {
+        // we have reached maximum recursion depth
+        // return the black color
+        return Vec3::new(0., 0., 0.);
+    }
+
+    if let Some(hit_record) = world.hit(ray, 0.001, f32::MAX) {
+        //return &Vec3::new(
+        //    hit_record.normal.x() + 1.,
+        //    hit_record.normal.y() + 1.,
+        //    hit_record.normal.z() + 1.,
+        //) * 0.5;
+
+        // assume diffuse material
+        let reflected_direction = &hit_record.point + Sphere::random_in_unit();
+
+        // determine the color of the new ray
+        // we keep doing this until we get a miss
+        // TODO: should add some kind of recursion depth limit
+        return &color(
+            &Ray::new(&hit_record.point, reflected_direction),
+            world,
+            depth - 1,
         ) * 0.5;
     }
 
@@ -41,6 +59,8 @@ fn main() {
     let nx = 200;
     let ny = 100;
     let ns = 100;
+
+    let max_depth = 50;
 
     println!("P3");
     println!("{} {}", nx, ny);
@@ -70,14 +90,14 @@ fn main() {
                 let ray = camera.get_ray(u, v);
 
                 // compute ray color entirely based on y axis dimension
-                ray_color = ray_color + color(&ray, &world);
+                ray_color = ray_color + color(&ray, &world, max_depth);
             }
 
             let ray_color = &ray_color / ns as f32;
 
-            let ir = (255.99 * ray_color.r()) as i32;
-            let ig = (255.99 * ray_color.g()) as i32;
-            let ib = (255.99 * ray_color.b()) as i32;
+            let ir = (255.99 * ray_color.r().sqrt()) as i32;
+            let ig = (255.99 * ray_color.g().sqrt()) as i32;
+            let ib = (255.99 * ray_color.b().sqrt()) as i32;
 
             println!("{} {} {}", ir, ig, ib);
         }

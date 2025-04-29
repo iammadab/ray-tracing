@@ -2,6 +2,7 @@ use crate::{
     hitable::{HitRecord, Hitable},
     vec3::Vec3,
 };
+use rand::Rng;
 
 pub(crate) struct Sphere {
     center: Vec3,
@@ -11,6 +12,21 @@ pub(crate) struct Sphere {
 impl Sphere {
     pub(crate) fn new(center: Vec3, radius: f32) -> Self {
         Self { center, radius }
+    }
+
+    /// Returns a random point in some unit sphere
+    pub(crate) fn random_in_unit() -> Vec3 {
+        let mut rng = rand::rng();
+        loop {
+            let p = Vec3::new(
+                rng.random::<f32>(),
+                rng.random::<f32>(),
+                rng.random::<f32>(),
+            );
+            if p.squared_length() >= 1. {
+                break p;
+            }
+        }
     }
 }
 
