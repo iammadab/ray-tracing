@@ -3,7 +3,7 @@
 use std::fmt::Display;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub(crate) struct Vec3(f32, f32, f32);
 
 impl Vec3 {
