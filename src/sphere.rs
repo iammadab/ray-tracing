@@ -1,5 +1,6 @@
 use crate::{
     hitable::{HitRecord, Hitable},
+    material::Material,
     vec3::Vec3,
 };
 use rand::Rng;
@@ -7,11 +8,16 @@ use rand::Rng;
 pub(crate) struct Sphere {
     center: Vec3,
     radius: f32,
+    material: Box<dyn for<'a> Material<'a>>,
 }
 
 impl Sphere {
-    pub(crate) fn new(center: Vec3, radius: f32) -> Self {
-        Self { center, radius }
+    pub(crate) fn new(center: Vec3, radius: f32, material: Box<dyn for<'a> Material<'a>>) -> Self {
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 
     /// Returns a random point in some unit sphere
@@ -73,7 +79,12 @@ impl Hitable for Sphere {
             let point_at_t = ray.point_at(root);
             let point_normal = &(&point_at_t - &self.center) / self.radius;
 
-            return Some(HitRecord::new(root, point_at_t, point_normal));
+            return Some(HitRecord::new(
+                root,
+                point_at_t,
+                point_normal,
+                self.material.clone(),
+            ));
         }
 
         None

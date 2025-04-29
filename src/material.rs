@@ -3,10 +3,11 @@ use crate::ray::Ray;
 use crate::sphere::Sphere;
 use crate::vec3::Vec3;
 
-pub(crate) trait Material<'a> {
+pub(crate) trait Material<'a>: Clone {
     fn scatter(&self, ray: &'a Ray, hit_record: &'a HitRecord) -> (Vec3, Ray<'a>, bool);
 }
 
+#[derive(Clone)]
 pub(crate) struct Lambertian {
     attenuation: Vec3,
 }
@@ -25,6 +26,7 @@ impl<'a> Material<'a> for Lambertian {
     }
 }
 
+#[derive(Clone)]
 pub(crate) struct Metal {
     attenuation: Vec3,
 }
